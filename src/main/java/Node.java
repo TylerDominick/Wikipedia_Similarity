@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
- public class Node {
+public class Node implements Serializable {
         String word;
         int freq;
         Node next = null;

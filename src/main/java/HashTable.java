@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class HashTable {
+public class HashTable implements Serializable {
 
     String url;
     private Node[] data;
