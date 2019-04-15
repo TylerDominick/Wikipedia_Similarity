@@ -4,13 +4,13 @@ import java.nio.channels.FileChannel;
 
 public class BTree implements Serializable {
 
-    RandomAccessFile BTree_file;
+    private RandomAccessFile BTree_file;
     Btree_Node root;
-    int height;
-    int nodeSize = 4056;
-    final static int k = 8;
+    private int height;
+    private int nodeSize = 4056;
+    private final static int k = 8;
 
-    public BTree(RandomAccessFile file) throws Exception{
+    BTree(RandomAccessFile file) throws Exception{
         root = null;
         height = 0;
         this.BTree_file = file;
@@ -21,7 +21,7 @@ public class BTree implements Serializable {
         this.root=x;
     }
 
-    public void insert(BTree tree, int key) throws Exception{
+    void insert(BTree tree, int key) throws Exception{
         Btree_Node root = tree.root;
         if(root.count == 2*k-1){
             Btree_Node s = createNode();
@@ -35,7 +35,7 @@ public class BTree implements Serializable {
         readyToInsert(root,key);
     }
 
-    public void readyToInsert(Btree_Node tree, int key) throws Exception{
+    private void readyToInsert(Btree_Node tree, int key) throws Exception{
         int count = tree.count;
         if(tree.leaf ==1){
             while(count >= 1 && key < tree.keys[count - 1]){
@@ -100,14 +100,14 @@ public class BTree implements Serializable {
         writeToDisk(parent);
     }
 
-    public Btree_Node createNode() throws Exception{
+    private Btree_Node createNode() throws Exception{
         BTree_file.seek(BTree_file.length());
         Btree_Node temp = new Btree_Node(BTree_file.getFilePointer());
         writeToDisk(temp);
         return temp;
     }
 
-    public void writeToDisk(Btree_Node node) throws Exception{
+    private void writeToDisk(Btree_Node node) throws Exception{
         BTree_file.seek(node.nodeID);
         FileChannel f = BTree_file.getChannel();
 
@@ -129,7 +129,7 @@ public class BTree implements Serializable {
         b.clear();
     }
 
-    public Btree_Node readFromDisk(long position)throws Exception{
+    private Btree_Node readFromDisk(long position)throws Exception{
         BTree_file.seek(position);
         FileChannel f = BTree_file.getChannel();
         ByteBuffer b = ByteBuffer.allocate(nodeSize);
@@ -149,7 +149,7 @@ public class BTree implements Serializable {
         return temp;
     }
 
-    public boolean contians(Btree_Node node, int key, String url) throws Exception{
+    boolean contains(Btree_Node node, int key, String url) throws Exception{
         int i = 0;
         while(i < node.count && key>node.keys[i]){
             i++;
@@ -170,7 +170,7 @@ public class BTree implements Serializable {
             return false;
         }else{
             Btree_Node tmp = readFromDisk(node.children[i]);
-            return contians(tmp,key,url);
+            return contains(tmp,key,url);
 
         }return false;
     }

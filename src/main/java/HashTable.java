@@ -2,19 +2,19 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class HashTable implements Serializable {
+class HashTable implements Serializable {
 
     String url;
     private Node[] data;
-    int initialSize = 64;
+    private int initialSize = 64;
     private int count;
 
 
 
-    public HashTable( String url){ data = new Node[initialSize]; this.url = url;}
+    HashTable( String url){ data = new Node[initialSize]; this.url = url;}
 
     //creates a hashcode based on the chars
-    int hashCode(String word){
+    private int hashCode(String word){
         return Math.abs(word.hashCode() % data.length);
     }
 
@@ -66,7 +66,7 @@ public class HashTable implements Serializable {
 
     }
 
-    void resize(){
+    private void resize(){
         Node[] largerTable = new Node[data.length*2];
         for(int i = 0; i<data.length;i++){
             Node nodes = data[i];
@@ -97,7 +97,7 @@ public class HashTable implements Serializable {
         }
     }
 
-    boolean searchAndInc(Node n, String key){
+    private boolean searchAndInc(Node n, String key){
         if(n == null){
             return false;
         }

@@ -4,32 +4,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class Gui extends JFrame{
-    private Result result;
+class Gui extends JFrame{
     private InputForm inputForm;
     JDialog dialog;
-    JLabel label;
+    JOptionPane optionPane;
 
 
 
 
-    public Gui() {
+     Gui() {
          inputForm = new InputForm();
-         result = new Result();
             Container c = getContentPane();
             c.add(inputForm);
             inputForm.findSimilar.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    Controller.createTables(inputForm.inputUrl.getText());
-                    HashTable s = Similarity.cosineSimilarity(Controller.getInputTable(),Controller.getTables());
-                    System.out.println(s.url);
-                    dialog = new JDialog();
-                    label = new JLabel(s.url);
-                    dialog.add(label);
-                    dialog.setSize(600, 75);
+                    Controller.run(inputForm.inputUrl.getText());
+                    optionPane = new JOptionPane();
+                    optionPane.setMessage("Most similar: " + Controller.bestPage +"\nClosest Mediod: " + Controller.medioid);
+                    optionPane.setMessageType(JOptionPane.INFORMATION_MESSAGE);
+                    dialog = optionPane.createDialog(null,"Wikipedia Similarity");
                     dialog.setVisible(true);
                 }
             });
 
     }
+
 }
